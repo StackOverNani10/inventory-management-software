@@ -1,15 +1,69 @@
+"use client"
 import { BaggageClaim, BarChart3, Cable, ChevronLeft, Computer, Folder, Home, ShoppingBag, ShoppingBasket } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import SubscriptionCard from './SubscriptionCard'
-
+import SidebarDropdownLink from './SidebarDropdownLink'
+  
 export default function Sidebar() {
+  const inventoryLinks = [
+    {
+        title: 'Items',
+        href: '/dashboard/inventory',
+    },
+    {
+        title: 'Item Group',
+        href: '/dashboard/inventory',
+    },
+    {
+        title: 'Inventory Adjustment',
+        href: '#',
+    },
+  ];
+  const salesLinks = [
+    {
+        title: 'Customers',
+        href: '#',
+    },
+    {
+        title: 'Sales Orders',
+        href: '#',
+    },
+    {
+        title: 'Packages',
+        href: '#',
+    },
+    {
+        title: 'Shipments',
+        href: '#',
+    },
+    {
+        title: 'Invoices',
+        href: '#',
+    },
+    {
+        title: 'Sales Receipts',
+        href: '#',
+    },
+    {
+        title: 'Payment Received',
+        href: '#',
+    },
+    {
+        title: 'Sales Returns',
+        href: '#',
+    },
+    {
+        title: 'Credit Notes',
+        href: '#',
+    },
+  ];
   return (
     <div className='w-60 min-h-screen bg-slate-800 text-slate-50 fixed'>
         {/* Top Part */}
         <div className="flex flex-col">
             {/* Logo */}
-            <Link href='' className="bg-slate-950 flex space-x-2 items-center py-3 px-2">
+            <Link href='#' className="bg-slate-950 flex space-x-2 items-center py-3 px-2">
                 <Computer/>
                 <span className='text-xl font-semibold'>Inventory</span>
             </Link>
@@ -19,14 +73,8 @@ export default function Sidebar() {
                     <Home className='w-4 h-4'/>
                     <span>Home</span>
                 </Link>
-                <button className='flex items-center space-x-2 p-2'>
-                    <BaggageClaim className='w-4 h-4'/>
-                    <span>Inventory</span>
-                </button>
-                <button className='flex items-center space-x-2 p-2'>
-                    <ShoppingBag className='w-4 h-4'/>
-                    <span>Sales</span>
-                </button>
+                <SidebarDropdownLink title='Inventory' links={inventoryLinks} icon={BaggageClaim}/>
+                <SidebarDropdownLink title='Sales' links={salesLinks} icon={ShoppingBag}/>
                 <button className='flex items-center space-x-2 p-2'>
                     <ShoppingBasket className='w-4 h-4'/>
                     <span>Purchases</span>
@@ -44,20 +92,17 @@ export default function Sidebar() {
                     <span>Documents</span>
                 </Link>
             </nav>
+            {/* Subscription Card */}
             <SubscriptionCard/>
         </div>
         
-
-        {/* Bottom */}
+        {/* Footer Icon */}
         <div className="flex flex-col">
+            {/* Bottom */}
             <button className="bg-slate-950 flex space-x-2 items-center justify-center py-3 px-2">
                 <ChevronLeft/>
             </button>
         </div>
-        {/* Subscription Card */}
-        
-        {/* Footer Icon */}
-
     </div>
   )
 }

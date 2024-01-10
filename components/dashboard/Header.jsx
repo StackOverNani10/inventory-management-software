@@ -45,7 +45,7 @@ export default function Header() {
             <LayoutGrid className='w-6 h-6 text-slate-900'/>
           </button>
         </div>
-        {/*  */}
+        {/* Menu */}
       </div>
     </div>
   )
