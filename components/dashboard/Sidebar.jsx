@@ -9,11 +9,23 @@ export default function Sidebar() {
   const inventoryLinks = [
     {
         title: 'Items',
-        href: '/dashboard/inventory',
+        href: '/dashboard/inventory/items/new',
     },
     {
-        title: 'Item Group',
-        href: '/dashboard/inventory',
+        title: 'Categories',
+        href: '/dashboard/inventory/categories/new',
+    },
+    {
+        title: 'Brands',
+        href: '/dashboard/inventory/brands/new',
+    },
+    {
+        title: 'Units',
+        href: '/dashboard/inventory/units/new',
+    },
+    {
+        title: 'Warehouse',
+        href: '/dashboard/inventory/warehouse/new',
     },
     {
         title: 'Inventory Adjustment',
@@ -69,7 +81,7 @@ export default function Sidebar() {
             </Link>
             {/* Links */}
             <nav className='flex flex-col gap-3 px-3 py-6'>
-                <Link href='#' className='flex items-center space-x-2 bg-blue-600 text-slate-50 p-2 rounded-md'>
+                <Link href='/dashboard/home' className='flex items-center space-x-2 bg-blue-600 text-slate-50 p-2 rounded-md'>
                     <Home className='w-4 h-4'/>
                     <span>Home</span>
                 </Link>

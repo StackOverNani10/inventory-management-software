@@ -1,0 +1,60 @@
+name: CI
+
+# Definir las ramas a construir.
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+# Definir las ambientes de construcción.
+stages:
+  - build
+  - test
+  - deploy
+
+# Definir los trabajos para cada ambiente.
+jobs:
+  include:
+    - stage: build
+      language: node_js
+      node_js: 12.16.1
+      os: linux
+      dist: xenial
+      cache: npm
+      before_install:
+        - npm install -g npm@latest
+      script:
+        - npm run dev
+      # Notificamos que a pasado el ambiente build al encargado del mismo
+      Notifications:
+        #slack: <slack_account>:<slack_token>#<slack_channel>
+        email: 1097711@est.intec.edu.do   
+
+    - stage: test
+      name: "Unit Tests" 
+      script:
+        - ./unit-tests
+      name: "Integration Tests"
+      script:
+        - ./integration-tests
+      # Notificamos que a pasado el ambiente test al encargado del mismo
+      Notifications:
+        email: 1097711@est.intec.edu.do
+        #slack: <slack_account>:<slack_token>#<slack_channel>
+
+    - stage: deploy
+      provider: releases  # use Github pages instead: pages 
+      token: $GITHUB_TOKEN
+      file_glob: true
+      file: ./
+      skip_cleanup: true
+      overwrite: true
+      on:
+        branch: master
+      # Notificamos que a pasado el ambiente deploy al encargado del mismo
+      Notifications:
+        #slack: <slack_account>:<slack_token>#<slack_channel>
+        email: 1097711@est.intec.edu.do
