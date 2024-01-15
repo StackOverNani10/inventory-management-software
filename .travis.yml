@@ -55,7 +55,7 @@ jobs:
       on:
         branch: master
       # Notificamos que a pasado el ambiente deploy al encargado del mismo
-      notifications:
+      Notifications:
         #slack: <slack_account>:<slack_token>#<slack_channel>
         recipients:
       - 1106630@est.intec.edu.do
