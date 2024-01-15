@@ -57,4 +57,4 @@ jobs:
       # Notificamos que a pasado el ambiente deploy al encargado del mismo
       Notifications:
         #slack: <slack_account>:<slack_token>#<slack_channel>
-        email: 1097711@est.intec.edu.do
+        email: 1106630@est.intec.edu.do
