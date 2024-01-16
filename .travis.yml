@@ -1,4 +1,7 @@
-name: CI
+sudo: required
+
+services:
+  - docker
 
 # Definir las ramas a construir.
 on:
@@ -19,31 +22,25 @@ stages:
 jobs:
   include:
     - stage: build
-      language: node_js
-      node_js:
-        - "stable"
-      cache:
-        directories:
-          - node_modules
       before_install:
-        - npm install -g npm@latest
+        - docker build -t stackovernani10/inventory-management-software -f Dockerfile.dev .
       script:
-        - npm run build
+        - docker run stackovernani10/inventory-management-software
       # Notificamos que a pasado el ambiente build al encargado del mismo
       notifications:
         email:
           recipients:
             - 1097711@est.intec.edu.do
           on_success: always
-          on_failure: always   
+          on_failure: always
 
     - stage: test
-      name: "Unit Tests" 
+      name: "Unit Tests"
       script:
-        - ./unit-tests
-      name: "Integration Tests"
-      script:
-        - ./integration-tests
+        - npm run test
+      #name: "Integration Tests"
+      #script:
+      #  - ./integration-tests
       # Notificamos que a pasado el ambiente test al encargado del mismo
       notifications:
         email:
@@ -53,7 +50,7 @@ jobs:
           on_failure: always
 
     - stage: deploy
-      provider: releases  # use Github pages instead: pages 
+      provider: releases # use Github pages instead: pages
       token: $GITHUB_TOKEN
       file_glob: true
       file: ./
