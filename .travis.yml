@@ -20,18 +20,22 @@ jobs:
   include:
     - stage: build
       language: node_js
-      node_js: 12.16.1
-      os: linux
-      dist: xenial
-      cache: npm
+      node_js:
+        - "stable"
+      cache:
+        directories:
+          - node_modules
       before_install:
         - npm install -g npm@latest
       script:
-        - npm run dev
+        - npm run build
       # Notificamos que a pasado el ambiente build al encargado del mismo
-      Notifications:
-        #slack: <slack_account>:<slack_token>#<slack_channel>
-        email: 1097711@est.intec.edu.do   
+      notifications:
+        email:
+          recipients:
+            - 1097711@est.intec.edu.do
+          on_success: always
+          on_failure: always   
 
     - stage: test
       name: "Unit Tests" 
@@ -41,9 +45,12 @@ jobs:
       script:
         - ./integration-tests
       # Notificamos que a pasado el ambiente test al encargado del mismo
-      Notifications:
-        email: 1097711@est.intec.edu.do
-        #slack: <slack_account>:<slack_token>#<slack_channel>
+      notifications:
+        email:
+          recipients:
+            - 1097711@est.intec.edu.do
+          on_success: always
+          on_failure: always
 
     - stage: deploy
       provider: releases  # use Github pages instead: pages 
