@@ -26,6 +26,7 @@ jobs:
         - docker build -t stackovernani10/inventory-management-software -f Dockerfile.dev .
       script:
         - docker run stackovernani10/inventory-management-software npm run build
+        - bundle exec rake build
       # Notificamos que a pasado el ambiente build al encargado del mismo
       notifications:
         email:
@@ -49,9 +50,9 @@ jobs:
           on_success: always
           on_failure: always
 
-    - stage: deploy
+     - stage: deploy
       script:
-      - bundle exec rake
+        - bundle exec rake deploy
       if: branch = master AND type = push
       provider: releases # use Github pages instead: pages
       token: $GITHUB_TOKEN
