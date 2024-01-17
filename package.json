@@ -32,9 +32,8 @@
   "build": "webpack",
   "test": "jest"
  
-},
+}
 
   }
   
-}
 
