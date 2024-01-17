@@ -45,7 +45,7 @@ jobs:
       notifications:
         email:
           recipients:
-            - 1097711@est.intec.edu.do
+            - 1106095@est.intec.edu.do
           on_success: always
           on_failure: always
 
