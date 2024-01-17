@@ -12,10 +12,17 @@ end
 task :deploy => [:clean] do
   puts "Desplegando la aplicación en GitHub Pages..."
   
+  # Verifica la rama actual
+  sh "git branch"
+  
   # Cambia a la rama que deseas desplegar (asegúrate de ajustar el nombre de la rama)
   sh "git checkout master"
   
-  # Asegúrate de tener cambios para hacer push (podrías ajustar esto según tu flujo de trabajo)
+  # Configura el nombre de usuario y correo electrónico de git (ajusta según tu configuración)
+  sh "git config user.name 'TuNombre'"
+  sh "git config user.email 'tu@email.com'"
+  
+  # Asegúrate de tener cambios para hacer push (ajusta según tu flujo de trabajo)
   sh "git add -A"
   sh "git commit -m 'Actualizando para despliegue'"
   
