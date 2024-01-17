@@ -50,9 +50,9 @@ jobs:
           on_success: always
           on_failure: always
 
-     - stage: deploy
+    - stage: deploy
       script:
-        - bundle exec rake deploy 
+        - bundle exec rake deploy
       if: branch = master AND type = push
       provider: releases # use Github pages instead: pages
       token: $GITHUB_TOKEN
