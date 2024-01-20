@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "build": "webpack",
-    "test": "NODE_ENV=test riteway -r @babel/register 'src/**/*.test.js'"
+    "test": "npx jest"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.0.3",
