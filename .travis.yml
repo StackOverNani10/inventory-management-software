@@ -38,9 +38,6 @@ jobs:
       name: "Unit Tests"
       script:
         - npm run test
-      #name: "Integration Tests"
-      #script:
-      #  - ./integration-tests
       # Notificamos que a pasado el ambiente test al encargado del mismo
       notifications:
         email:
