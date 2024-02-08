@@ -24,8 +24,8 @@ export default function SelectInput({
         >
           {options.map((option, index) => {
             return (
-              <option key={index} value={option.value}>
-                {option.label}
+              <option key={index} value={option.id}>
+                {option.title}
               </option>
             );
           })}

@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  title                   String
+  description             String?
+  category                Category                  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId              String                    @db.ObjectId
+  sku                     String                    @unique
+  barcode                 String?
+  quantity                Int
+  unit                    Unit                      @relation(fields: [unitId], references: [id])
+  unitId                  String                    @db.ObjectId
+  brand                   Brand                     @relation(fields: [brandId], references: [id])
+  brandId                 String                    @db.ObjectId
+  sellingPrice            Float
+  buyingPrice             Float
+  Supplier                Supplier?                 @relation(fields: [supplierId], references: [id])
+  supplierId              String?                   @db.ObjectId
+  reOrderPoint            Int
+  Warehouse               Warehouse?                @relation(fields: [warehouseId], references: [id])
+  warehouseId             String?                   @db.ObjectId
+  imageUrl                String
+  weight                  Float?
+  dimensions              String?
+  taxRate                 Float
+  notes                   String?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  AddStockAdjustment      AddStockAdjustment[]
+  TransferStockAdjustment TransferStockAdjustment[]
+}
+
+model Category {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Item        Item[]
+}
+
+model Brand {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Item      Item[]
+}
+
+model Unit {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  abbreviation String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Item         Item[]
+}
+
+model Warehouse {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  location      String?
+  description   String?
+  warehouseType String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Item          Item[]
+}
+
+model AddStockAdjustment {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  referenceNumber      String
+  Item                 Item     @relation(fields: [itemId], references: [id])
+  itemId               String   @db.ObjectId
+  addStockQty          Int
+  receivingWarehouseId String
+  notes                String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model TransferStockAdjustment {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  referenceNumber      String
+  Item                 Item     @relation(fields: [itemId], references: [id])
+  itemId               String   @db.ObjectId
+  transferStockQty     Int
+  givingWarehouseId    String
+  receivingWarehouseId String
+  notes                String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Supplier {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  phone         String?
+  email         String?
+  address       String?
+  contactPerson String?
+  supplierCode  String   @unique
+  paymentTerms  String?
+  taxID         String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Item          Item[]
+}
