@@ -1,8 +1,14 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import DeleteButton from "./DeleteButton";
 
-export default function DataTable({ columns = [], data = [], resourceTitle }) {
+export default function DataTable({
+  columns = [],
+  data = [],
+  resourceTitle,
+  endpoint,
+}) {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -10,12 +16,19 @@ export default function DataTable({ columns = [], data = [], resourceTitle }) {
           <tr>
             {columns.map((columnName, index) => {
               return (
-                <th key={index} scope="col" className="px-6 py-3 font-medium">
-                  {columnName}
+                <th key={index} scope="col" className="px-6 py-4">
+                  {columnName.includes(".")
+                    ? // If the column name contains a dot, it's a nested object
+                      // Use the first part of the column name as the header
+                      columnName.split(".")[0]
+                    : columnName === "imageUrl"
+                    ? (columnName = "image")
+                    : // Otherwise, display the column name as is
+                      columnName}
                 </th>
               );
             })}
-            <th scope="col" className="px-6 py-3 font-medium">
+            <th scope="col" className="px-6 py-3">
               Actions
             </th>
           </tr>
@@ -27,25 +40,39 @@ export default function DataTable({ columns = [], data = [], resourceTitle }) {
                 key={index}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                {columns.map((columnName, index) => {
-                  return (
-                    <td key={index} className="px-6 py-4">
-                      {item[columnName]}
-                    </td>
-                  );
-                })}
+                {columns.map((columnName, index) => (
+                  <td key={index} className="px-6 py-4">
+                    {columnName.includes(".") ? (
+                      // If the column name contains a dot, it's a nested object
+                      // Access the nested key using reduce
+                      columnName.split(".").reduce((obj, key) => obj[key], item)
+                    ) : columnName === "createdAt" ||
+                      columnName === "updatedAt" ? (
+                      // Convert date columns to a more readable format
+                      new Date(item[columnName]).toLocaleDateString()
+                    ) : columnName === "imageUrl" ? (
+                      // Special handling for imageUrl to render an image
+                      <img
+                        src={item[columnName]}
+                        alt={`Image for ${resourceTitle}`}
+                        className="w-10 h-10 object-cover rounded-full"
+                      />
+                    ) : (
+                      // Otherwise, display the value as is
+                      item[columnName]
+                    )}
+                  </td>
+                ))}
+
                 <td className="flex items-center px-6 py-4 space-x-4 text-right">
                   <Link
-                    href={`/dashboard/inventory/brands/${resourceTitle}/${item.id}`}
+                    href={`/dashboard/inventory/${resourceTitle}/update/${item.id}`}
                     className="flex items-center space-x-1 font-medium text-blue-600 dark:text-blue-500"
                   >
                     <Pencil className="w-4 h-4" />
                     <span>Edit</span>
                   </Link>
-                  <button className="flex items-center space-x-1 font-medium text-red-600 dark:text-red-500">
-                    <Trash2 className="w-4 h-4" />
-                    <span>Delete</span>
-                  </button>
+                  <DeleteButton id={item.id} endpoint={endpoint} />
                 </td>
               </tr>
             );

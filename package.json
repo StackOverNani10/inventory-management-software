@@ -22,6 +22,7 @@
     "react-hook-form": "^7.49.3",
     "react-hot-toast": "^2.4.1",
     "sass": "^1.69.6",
+    "sweetalert2": "^11.10.5",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^6.3.3"

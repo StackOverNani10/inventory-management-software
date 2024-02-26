@@ -1,6 +1,6 @@
 "use client";
 import { CreditCard, X } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function DashboardBanner() {
   const [hidden, setHidden] = useState(false);
@@ -9,7 +9,7 @@ export default function DashboardBanner() {
       className={`${
         hidden
           ? "hidden"
-          : "grid grid-cols-12 items-center py-6 px-16 bg-white gap-4 relative"
+          : "hidden md:grid grid-cols-12 items-center py-6 px-16 bg-white gap-4 relative"
       }`}
     >
       {/* Icon */}

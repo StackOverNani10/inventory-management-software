@@ -4,7 +4,7 @@ import {
   BarChart3,
   Cable,
   ChevronLeft,
-  Computer,
+  FileBox,
   Folder,
   Home,
   ShoppingBag,
@@ -102,10 +102,10 @@ export default function Sidebar({ showSideBar, setShowSideBar }) {
         {/* Logo */}
         <div className="flex justify-between">
           <Link
-            href="#"
+            href="/dashboard/home"
             className="bg-slate-950 flex space-x-2 items-center py-3 px-2 w-full"
           >
-            <Computer />
+            <FileBox />
             <span className="text-xl font-semibold">Inventory</span>
           </Link>
           <button
@@ -118,7 +118,7 @@ export default function Sidebar({ showSideBar, setShowSideBar }) {
         {/* Links */}
         <nav className="flex flex-col gap-3 px-3 py-6">
           <Link
-            href="/dashboard/home"
+            href="/dashboard/home/overview"
             className="flex items-center space-x-2 bg-blue-600 text-slate-50 p-2 rounded-md"
           >
             <Home className="w-4 h-4" />

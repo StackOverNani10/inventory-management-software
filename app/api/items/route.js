@@ -48,25 +48,51 @@ export async function GET(request) {
     try {
         const items = await db.item.findMany({
             orderBy: {
-                createdAt: 'desc' //Latest item
+                createdAt: "desc", //Latest item
             },
             include: {
-                category: true,
-            }
+                category: true, // Returns all fields for all categories
+                supplier: true, // Returns all suppliers fields  
+            },
         });
-        return new NextResponse(
-            JSON.stringify(items),
-            {
-                status: 200
-            }
-        );
+        return new NextResponse(JSON.stringify(items), {
+            status: 200,
+        });
     } catch (error) {
         console.log(error);
-        return NextResponse.json({
-            error,
-            message: "Failed to fetch the items"
-        }, {
-            status: 500
+        return NextResponse.json(
+            {
+                error,
+                message: "Failed to find the items",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+}
+
+export async function DELETE(request) {
+    try {
+        const id = request.nextUrl.searchParams.get("id");
+        const deletedItem = await db.item.delete({
+            where: {
+                id,
+            },
         });
+        return new NextResponse(JSON.stringify(deletedItem), {
+            status: 200,
+        });
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json(
+            {
+                error,
+                message: "Failed to delete the item",
+            },
+            {
+                status: 500,
+            }
+        );
     }
 }

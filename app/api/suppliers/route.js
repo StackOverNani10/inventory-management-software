@@ -49,22 +49,47 @@ export async function GET(request) {
     try {
         const suppliers = await db.supplier.findMany({
             orderBy: {
-                createdAt: 'desc' //Latest supplier
+                createdAt: "desc", //Latest supplier
             },
         });
-        return new NextResponse(
-            JSON.stringify(suppliers),
-            {
-                status: 200
-            }
-        );
+        return new NextResponse(JSON.stringify(suppliers), {
+            status: 200,
+        });
     } catch (error) {
         console.log(error);
-        return NextResponse.json({
-            error,
-            message: "Failed to fetch the suppliers"
-        }, {
-            status: 500
+        return NextResponse.json(
+            {
+                error,
+                message: "Failed to find the suppliers",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+}
+
+export async function DELETE(request) {
+    try {
+        const id = request.nextUrl.searchParams.get("id");
+        const deletedSupplier = await db.supplier.delete({
+            where: {
+                id,
+            },
         });
+        return new NextResponse(JSON.stringify(deletedSupplier), {
+            status: 200,
+        });
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json(
+            {
+                error,
+                message: "Failed to delete the supplier",
+            },
+            {
+                status: 500,
+            }
+        );
     }
 }

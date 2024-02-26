@@ -11,7 +11,7 @@ export async function POST(request) {
             receivingWarehouseId,
             notes,
         } = await request.json();
-        const adjustment = await db.transferStockAdjustment.create({
+        const stockTransfer = await db.transferStockAdjustment.create({
             data: {
                 referenceNumber,
                 itemId,
@@ -21,8 +21,8 @@ export async function POST(request) {
                 notes,
             },
         });
-        console.log(adjustment);
-        return new NextResponse(JSON.stringify(adjustment), {
+        console.log(stockTransfer);
+        return new NextResponse(JSON.stringify(stockTransfer), {
             status: 201,
         });
     } catch (error) {
@@ -30,7 +30,7 @@ export async function POST(request) {
         return NextResponse.json(
             {
                 error,
-                message: "Failed to create the adjustment",
+                message: "Failed to create the stock transfer",
             },
             {
                 status: 500,
@@ -41,24 +41,54 @@ export async function POST(request) {
 
 export async function GET(request) {
     try {
-        const adjustmentsTransferred = await db.transferStockAdjustment.findMany({
+        const stocksTransfered = await db.transferStockAdjustment.findMany({
             orderBy: {
-                createdAt: 'desc' //Latest adjustments Transferred
+                createdAt: "desc", //Latest stock Transfer
+            },
+            include: {
+                item: true,
+                givingWarehouse: true,
+                receivingWarehouse: true,
             },
         });
-        return new NextResponse(
-            JSON.stringify(adjustmentsTransferred),
-            {
-                status: 200
-            }
-        );
+        return new NextResponse(JSON.stringify(stocksTransfered), {
+            status: 200,
+        });
     } catch (error) {
         console.log(error);
-        return NextResponse.json({
-            error,
-            message: "Failed to fetch the adjustments Transferred"
-        }, {
-            status: 500
+        return NextResponse.json(
+            {
+                error,
+                message: "Failed to find the stocks transfered",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+}
+
+export async function DELETE(request) {
+    try {
+        const id = request.nextUrl.searchParams.get("id");
+        const deletedStocksTransfered = await db.transferStockAdjustment.delete({
+            where: {
+                id,
+            },
         });
+        return new NextResponse(JSON.stringify(deletedStocksTransfered), {
+            status: 200,
+        });
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json(
+            {
+                error,
+                message: "Failed to delete the stocks transfered",
+            },
+            {
+                status: 500,
+            }
+        );
     }
 }

@@ -4,11 +4,13 @@ import SelectInput from "@/components/formInputs/SelectInput";
 import SubmitButton from "@/components/formInputs/SubmitButton";
 import TextInput from "@/components/formInputs/TextInput";
 import TextareaInput from "@/components/formInputs/TextareaInput";
-import { makePostRequest } from "@/lib/apiRequest";
+import { makePostRequest, makePutRequest } from "@/lib/apiRequest";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function NewWarehouse() {
+export default function NewWarehouse({ initialData = {}, isUpdate = false }) {
+  const router = useRouter();
   const selectOptions = [
     {
       title: "Main",
@@ -24,18 +26,37 @@ export default function NewWarehouse() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: initialData,
+  });
   const [loading, setLoading] = useState(false);
 
+  function redirect() {
+    router.replace("/dashboard/inventory/warehouse");
+  }
   async function onSubmit(data) {
     console.log(data);
-    makePostRequest(setLoading, "api/warehouse", data, "Warehouse", reset);
+    if (isUpdate) {
+      // Update request
+      makePutRequest(
+        setLoading,
+        `api/warehouse/${initialData.id}`,
+        data,
+        "Warehouse",
+        redirect
+      );
+    } else {
+      makePostRequest(setLoading, "api/warehouse", data, "Warehouse", reset);
+    }
   }
 
   return (
     <div>
       {/* Header */}
-      <FormHeader title="New Warehouse" href="/dashboard/inventory/warehouse" />
+      <FormHeader
+        title={isUpdate ? "Update Warehouse" : "New Warehouse"}
+        href="/dashboard/inventory/warehouse"
+      />
       {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -69,7 +90,10 @@ export default function NewWarehouse() {
             errors={errors}
           />
         </div>
-        <SubmitButton isLoading={loading} title="Warehouse" />
+        <SubmitButton
+          isLoading={loading}
+          title={isUpdate ? "Update Warehouse" : "New Warehouse"}
+        />
       </form>
     </div>
   );

@@ -3,28 +3,49 @@ import FormHeader from "@/components/dashboard/FormHeader";
 import SubmitButton from "@/components/formInputs/SubmitButton";
 import TextInput from "@/components/formInputs/TextInput";
 import TextareaInput from "@/components/formInputs/TextareaInput";
-import { makePostRequest } from "@/lib/apiRequest";
+import { makePostRequest, makePutRequest } from "@/lib/apiRequest";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function NewCategory() {
+export default function NewCategory({ initialData = {}, isUpdate = false }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: initialData,
+  });
   const [loading, setLoading] = useState(false);
 
+  function redirect() {
+    router.replace("/dashboard/inventory/categories");
+  }
   async function onSubmit(data) {
     console.log(data);
-    makePostRequest(setLoading, "api/categories", data, "Category", reset);
+    if (isUpdate) {
+      // Update request
+      makePutRequest(
+        setLoading,
+        `api/categories/${initialData.id}`,
+        data,
+        "Category",
+        redirect
+      );
+    } else {
+      makePostRequest(setLoading, "api/categories", data, "Category", reset);
+    }
   }
 
   return (
     <div>
       {/* Header */}
-      <FormHeader title="New Category" href="/dashboard/inventory/categories" />
+      <FormHeader
+        title={isUpdate ? "Updated Category" : "New Category"}
+        href="/dashboard/inventory/categories"
+      />
       {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -44,7 +65,10 @@ export default function NewCategory() {
             errors={errors}
           />
         </div>
-        <SubmitButton isLoading={loading} title="Category" />
+        <SubmitButton
+          isLoading={loading}
+          title={isUpdate ? "Updated Category" : "New Category"}
+        />
       </form>
     </div>
   );

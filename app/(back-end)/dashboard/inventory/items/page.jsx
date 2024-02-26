@@ -6,9 +6,10 @@ import React from "react";
 export default async function Items() {
   const items = await getData("items");
   const columns = [
+    "imageUrl",
     "title",
     "description",
-    "categoryId",
+    "category.title",
     "quantity",
     "sellingPrice",
   ];
@@ -19,7 +20,12 @@ export default async function Items() {
       <FixedHeader title="Items" newLink="/dashboard/inventory/items/new" />
       {/* Table */}
       <div className="my-4 p-8">
-        <DataTable data={items} columns={columns} />
+        <DataTable
+          data={items}
+          columns={columns}
+          resourceTitle="items"
+          endpoint="items"
+        />
       </div>
     </div>
   );

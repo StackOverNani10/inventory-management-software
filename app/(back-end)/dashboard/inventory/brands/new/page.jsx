@@ -2,22 +2,40 @@
 import FormHeader from "@/components/dashboard/FormHeader";
 import SubmitButton from "@/components/formInputs/SubmitButton";
 import TextInput from "@/components/formInputs/TextInput";
-import { makePostRequest } from "@/lib/apiRequest";
+import { makePostRequest, makePutRequest } from "@/lib/apiRequest";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function NewBrand({ initialData = {}, isUpdate = false }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: initialData,
+  });
   const [loading, setLoading] = useState(false);
 
+  function redirect() {
+    router.replace("/dashboard/inventory/brands");
+  }
   async function onSubmit(data) {
     console.log(data);
-    makePostRequest(setLoading, "api/brands", data, "Brand", reset);
+    if (isUpdate) {
+      // Update request
+      makePutRequest(
+        setLoading,
+        `api/brands/${initialData.id}`,
+        data,
+        "Brand",
+        redirect
+      );
+    } else {
+      makePostRequest(setLoading, "api/brands", data, "Brand", reset);
+    }
   }
 
   return (

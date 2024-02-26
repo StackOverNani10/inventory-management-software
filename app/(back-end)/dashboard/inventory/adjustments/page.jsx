@@ -14,18 +14,18 @@ export default async function Adjustments() {
 
   const addColumns = [
     "referenceNumber",
-    "itemId",
+    "item.title",
     "addStockQty",
-    "receivingWarehouseId",
+    "receivingWarehouse.title",
     "notes",
   ];
 
   const transferColumns = [
     "referenceNumber",
-    "itemId",
+    "item.title",
     "transferStockQty",
-    "givingWarehouseId",
-    "receivingWarehouseId",
+    "givingWarehouse.title",
+    "receivingWarehouse.title",
     "notes",
   ];
   return (
@@ -40,13 +40,23 @@ export default async function Adjustments() {
         <h2 className="py-4 text-xl font-semibold">
           Stock Increments Adjustments
         </h2>
-        <DataTable data={addAdjustments} columns={addColumns} />
+        <DataTable
+          data={addAdjustments}
+          columns={addColumns}
+          resourceTitle="adjustments"
+          endpoint="adjustments/add"
+        />
       </div>
       <div className="my-4 p-8">
         <h2 className="py-4 text-xl font-semibold">
           Stock Transfer Adjustments
         </h2>
-        <DataTable data={transferAdjustments} columns={transferColumns} />
+        <DataTable
+          data={transferAdjustments}
+          columns={transferColumns}
+          resourceTitle="adjustments"
+          endpoint="adjustments/transfer"
+        />
       </div>
     </div>
   );

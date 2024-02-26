@@ -3,28 +3,51 @@ import SelectInput from "@/components/formInputs/SelectInput";
 import SubmitButton from "@/components/formInputs/SubmitButton";
 import TextInput from "@/components/formInputs/TextInput";
 import TextareaInput from "@/components/formInputs/TextareaInput";
-import { makePostRequest } from "@/lib/apiRequest";
+import { makePostRequest, makePutRequest } from "@/lib/apiRequest";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function TransferInventoryForm({ items, warehouses }) {
+export default function TransferInventoryForm({
+  items,
+  warehouses,
+  initialData,
+  isUpdate,
+}) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: initialData,
+  });
   const [loading, setLoading] = useState(false);
 
+  function redirect() {
+    router.replace("/dashboard/inventory/adjustments");
+  }
   async function onSubmit(data) {
     console.log(data);
-    makePostRequest(
-      setLoading,
-      "api/adjustments/transfer",
-      data,
-      "Adjustments",
-      reset
-    );
+    if (isUpdate) {
+      // Update request
+      makePutRequest(
+        setLoading,
+        `api/adjustments/transfer/${initialData.id}`,
+        data,
+        "Adjustments",
+        redirect
+      );
+    } else {
+      makePostRequest(
+        setLoading,
+        "api/adjustments/transfer",
+        data,
+        "Transfer Stock Adjustment",
+        reset
+      );
+    }
   }
 
   return (
@@ -76,7 +99,10 @@ export default function TransferInventoryForm({ items, warehouses }) {
           errors={errors}
         />
       </div>
-      <SubmitButton isLoading={loading} title="Adjustment" />
+      <SubmitButton
+        isLoading={loading}
+        title={isUpdate ? "Updated Adjustment" : "New Adjustment"}
+      />
     </form>
   );
 }

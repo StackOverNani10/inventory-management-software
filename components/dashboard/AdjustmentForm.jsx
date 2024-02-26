@@ -5,17 +5,36 @@ import TransferInventoryForm from "@/components/dashboard/TransferInventoryForm"
 import { Minus, Plus } from "lucide-react";
 import React from "react";
 
-export default function AdjustmentForm({ items, warehouses }) {
+export default function AdjustmentForm({
+  items,
+  warehouses,
+  initialData,
+  isUpdate,
+}) {
   const tabs = [
     {
       title: "Add Stock",
       icon: Plus,
-      form: <AddInventoryForm items={items} warehouses={warehouses} />,
+      form: (
+        <AddInventoryForm
+          items={items}
+          warehouses={warehouses}
+          initialData={initialData}
+          isUpdate={isUpdate}
+        />
+      ),
     },
     {
       title: "Transfer Stock",
       icon: Minus,
-      form: <TransferInventoryForm items={items} warehouses={warehouses} />,
+      form: (
+        <TransferInventoryForm
+          items={items}
+          warehouses={warehouses}
+          initialData={initialData}
+          isUpdate={isUpdate}
+        />
+      ),
     },
   ];
   const [activeTab, setActiveTab] = React.useState("Add Stock");
@@ -23,7 +42,7 @@ export default function AdjustmentForm({ items, warehouses }) {
     <div>
       {/* Header */}
       <FormHeader
-        title="New Adjustment"
+        title={isUpdate ? "Updated Adjustment" : "New Adjustment"}
         href="/dashboard/inventory/adjustments"
       />
       {/* Tabs */}

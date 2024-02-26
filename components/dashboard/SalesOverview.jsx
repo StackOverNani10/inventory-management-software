@@ -46,9 +46,9 @@ export default function SalesOverview() {
   return (
     <div className="grid grid-cols-12 bg-blue-50 border-b border-slate-300 gap-4">
       {/* SALES ACTIVITY */}
-      <div className="col-span-8 border-r border-slate-300 p-8">
+      <div className="col-span-full lg:col-span-8 border-r border-slate-300 p-8 py-16 lg:py-8">
         <h2 className="mb-6 text-xl">Sales Activity</h2>
-        <div className="grid grid-cols-4 gap-4 pr-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-8">
           {/* Card */}
           {salesActivity.map((item, index) => {
             return <SalesActivityCard key={index} item={item} />;
@@ -56,7 +56,7 @@ export default function SalesOverview() {
         </div>
       </div>
       {/* INVENTORY SUMMARY */}
-      <div className="col-span-4 p-8">
+      <div className="col-span-full lg:col-span-4 p-8">
         <h2 className="mb-6 text-xl">Inventory Summary</h2>
         <div className="">
           {inventorySummary.map((item, index) => {

@@ -13,7 +13,12 @@ export default async function Brands() {
       <FixedHeader title="Brands" newLink="/dashboard/inventory/brands/new" />
       {/* Table */}
       <div className="my-4 p-8">
-        <DataTable data={brands} columns={columns} resourceTitle="brands" />
+        <DataTable
+          data={brands}
+          columns={columns}
+          resourceTitle="brands"
+          endpoint="brands"
+        />
       </div>
     </div>
   );
