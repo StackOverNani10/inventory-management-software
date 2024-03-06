@@ -5,7 +5,7 @@ import React from "react";
 
 export default async function Supplier() {
   const suppliers = await getData("suppliers");
-  const columns = ["title", "phone", "email"];
+  const columns = ["title", "phone", "email", "contactPerson", "address"];
 
   return (
     <div>

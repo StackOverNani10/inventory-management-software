@@ -21,14 +21,14 @@ model Item {
   quantity                Int
   unit                    Unit                      @relation(fields: [unitId], references: [id])
   unitId                  String                    @db.ObjectId
-  brand                   Brand                     @relation(fields: [brandId], references: [id])
+  brand                   Brand                     @relation(fields: [brandId], references: [id], onDelete: Cascade)
   brandId                 String                    @db.ObjectId
   sellingPrice            Float
   buyingPrice             Float
-  supplier                Supplier?                 @relation(fields: [supplierId], references: [id])
+  supplier                Supplier?                 @relation(fields: [supplierId], references: [id], onDelete: Cascade)
   supplierId              String?                   @db.ObjectId
   reOrderPoint            Int
-  Warehouse               Warehouse?                @relation(fields: [warehouseId], references: [id])
+  Warehouse               Warehouse?                @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
   warehouseId             String?                   @db.ObjectId
   imageUrl                String
   weight                  Float?
@@ -73,6 +73,7 @@ model Warehouse {
   location           String?
   description        String?
   warehouseType      String
+  stockQty           Int                       @default(0)
   createdAt          DateTime                  @default(now())
   updatedAt          DateTime                  @updatedAt
   Item               Item[]
@@ -84,43 +85,46 @@ model Warehouse {
 model AddStockAdjustment {
   id                   String     @id @default(auto()) @map("_id") @db.ObjectId
   referenceNumber      String
-  item                 Item       @relation(fields: [itemId], references: [id])
+  item                 Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId               String     @db.ObjectId
   addStockQty          Int
   notes                String?
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
-  receivingWarehouse   Warehouse? @relation(fields: [receivingWarehouseId], references: [id])
+  receivingWarehouse   Warehouse? @relation(fields: [receivingWarehouseId], references: [id], onDelete: Cascade)
   receivingWarehouseId String?    @db.ObjectId
+  Supplier             Supplier?  @relation(fields: [supplierId], references: [id])
+  supplierId           String?    @db.ObjectId
 }
 
 model TransferStockAdjustment {
   id                   String     @id @default(auto()) @map("_id") @db.ObjectId
   referenceNumber      String
-  item                 Item       @relation(fields: [itemId], references: [id])
+  item                 Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
   itemId               String     @db.ObjectId
   transferStockQty     Int
   notes                String?
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
-  givingWarehouse      Warehouse? @relation("GivingWarehouse", fields: [givingWarehouseId], references: [id])
+  givingWarehouse      Warehouse? @relation("GivingWarehouse", fields: [givingWarehouseId], references: [id], onDelete: Cascade)
   givingWarehouseId    String?    @db.ObjectId
-  receivingWarehouse   Warehouse? @relation("ReceivingWarehouse", fields: [receivingWarehouseId], references: [id])
+  receivingWarehouse   Warehouse? @relation("ReceivingWarehouse", fields: [receivingWarehouseId], references: [id], onDelete: Cascade)
   receivingWarehouseId String?    @db.ObjectId
 }
 
 model Supplier {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  phone         String?
-  email         String?
-  address       String?
-  contactPerson String?
-  supplierCode  String   @unique
-  paymentTerms  String?
-  taxID         String?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  Item          Item[]
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  phone              String?
+  email              String?
+  address            String?
+  contactPerson      String?
+  supplierCode       String               @unique
+  paymentTerms       String?
+  taxID              String?
+  notes              String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  Item               Item[]
+  AddStockAdjustment AddStockAdjustment[]
 }

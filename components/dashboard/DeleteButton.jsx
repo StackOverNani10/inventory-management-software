@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 export default function DeleteButton({ id, endpoint }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const baseUrl = process.env.PROD_BASE_URL;
+  const baseUrl = process.env.PROD_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL;
 
   async function handleDelete() {
     Swal.fire({
@@ -29,6 +29,9 @@ export default function DeleteButton({ id, endpoint }) {
           router.refresh();
           setLoading(false);
           toast.success("Deleted Successfully!");
+        } else {
+          setLoading(false);
+          toast.error(res.headers.get("message") || "An error occurred");
         }
       } else {
         setLoading(false);

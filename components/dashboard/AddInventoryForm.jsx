@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 export default function AddInventoryForm({
   items,
   warehouses,
+  suppliers,
   initialData,
   isUpdate,
 }) {
@@ -61,7 +62,6 @@ export default function AddInventoryForm({
           name="referenceNumber"
           register={register}
           errors={errors}
-          className="w-full"
           defaultValue={`ADJ-${new Date().getTime()}`}
         />
         <SelectInput
@@ -71,13 +71,12 @@ export default function AddInventoryForm({
           className="w-full"
           options={items}
         />
-        <TextInput
-          label="Enter Quantity of Stock to Add"
-          name="addStockQty"
-          type="number"
+        <SelectInput
+          label="Select the Supplier"
+          name="supplierId"
           register={register}
-          errors={errors}
           className="w-full"
+          options={suppliers}
         />
         <SelectInput
           label="Select the Warehouse that will receive the Stock"
@@ -85,6 +84,14 @@ export default function AddInventoryForm({
           register={register}
           className="w-full"
           options={warehouses}
+        />
+        <TextInput
+          label="Enter Quantity of Stock to Add"
+          name="addStockQty"
+          type="number"
+          register={register}
+          errors={errors}
+          className="w-full"
         />
         <TextareaInput
           label="Adjustments Notes"

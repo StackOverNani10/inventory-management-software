@@ -8,6 +8,7 @@ import React from "react";
 export default function AdjustmentForm({
   items,
   warehouses,
+  suppliers,
   initialData,
   isUpdate,
 }) {
@@ -19,6 +20,7 @@ export default function AdjustmentForm({
         <AddInventoryForm
           items={items}
           warehouses={warehouses}
+          suppliers={suppliers}
           initialData={initialData}
           isUpdate={isUpdate}
         />

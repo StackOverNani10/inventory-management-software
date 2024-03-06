@@ -5,7 +5,7 @@ import React from "react";
 
 export default async function Warehouse() {
   const warehouses = await getData("warehouse");
-  const columns = ["title", "location", "warehouseType"];
+  const columns = ["title", "location", "warehouseType", "stockQty"];
 
   return (
     <div>

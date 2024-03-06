@@ -5,7 +5,7 @@ import React from "react";
 
 export default async function Brands() {
   const brands = await getData("brands");
-  const columns = ["title", "createdAt", "updatedAt"];
+  const columns = ["title", "createdAt"];
 
   return (
     <div>

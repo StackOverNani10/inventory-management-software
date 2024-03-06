@@ -4,6 +4,27 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
     try {
         const itemData = await request.json();
+
+        // Get the warehouse
+        const warehouseToUpdate = await db.warehouse.findUnique({
+            where: {
+                id: itemData.warehouseId,
+            },
+        });
+
+        // Current Warehouse Stock Quantity
+        const currentWarehouseStockQty = warehouseToUpdate.stockQty;
+
+        // Modify the Stock Quantity
+        const newStockQty = parseInt(currentWarehouseStockQty) + parseInt(itemData.qty);
+
+        // Update the Warehouse Inventory with the new Stock Quantity
+        await db.warehouse.update({
+            where: { id: itemData.warehouseId },
+            data: { stockQty: newStockQty },
+        });
+
+        // Create the Item in the database
         const item = await db.item.create({
             data: {
                 title: itemData.title,
@@ -26,7 +47,7 @@ export async function POST(request) {
                 notes: itemData.notes,
             },
         });
-        console.log(item);
+
         return new NextResponse(JSON.stringify(item), {
             status: 201,
         });
@@ -52,7 +73,10 @@ export async function GET(request) {
             },
             include: {
                 category: true, // Returns all fields for all categories
-                supplier: true, // Returns all suppliers fields  
+                supplier: true, // Returns all suppliers fields 
+                brand: true, // Returns all brand fields
+                unit: true, // Returns all unit fields
+                Warehouse: true, // Returns all warehouse fields
             },
         });
         return new NextResponse(JSON.stringify(items), {

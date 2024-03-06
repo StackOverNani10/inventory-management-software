@@ -18,6 +18,7 @@ export default async function Adjustments() {
     "addStockQty",
     "receivingWarehouse.title",
     "notes",
+    "createdAt",
   ];
 
   const transferColumns = [
@@ -27,6 +28,7 @@ export default async function Adjustments() {
     "givingWarehouse.title",
     "receivingWarehouse.title",
     "notes",
+    "createdAt",
   ];
   return (
     <div>

@@ -65,14 +65,48 @@ export async function DELETE(request) {
         });
     } catch (error) {
         console.log(error);
-        return NextResponse.json(
-            {
-                error,
-                message: "Failed to delete the unit",
-            },
-            {
-                status: 500,
-            }
-        );
+        console.log(error.code);
+        switch (error.code) {
+            case "P2025":
+                return NextResponse.json(
+                    {
+                        error,
+                        message: "Unit not found",
+                    },
+                    {
+                        status: 404,
+                    }
+                );
+            case "P2023":
+                return NextResponse.json(
+                    {
+                        error,
+                        message: "Unit is in use",
+                    },
+                    {
+                        status: 400,
+                    }
+                );
+            case "P2014":
+                return NextResponse.json(
+                    {
+                        error,
+                        message: "The change you are trying to make would violate the required relation 'ItemToUnit' between the `Item` and `Unit` models.",
+                    },
+                    {
+                        status: 400,
+                    }
+                );
+            default:
+                return NextResponse.json(
+                    {
+                        error,
+                        message: "Failed to delete the unit",
+                    },
+                    {
+                        status: 500,
+                    }
+                );
+        }
     }
 }
